@@ -32,6 +32,9 @@ export class DbHelper {
   async delete(id: string): Promise<boolean> {
     try {
       const newRecords = this.records.filter((i: any) => i.email !== id);
+      if (newRecords.length === this.records.length) {
+        return false; // nothing deleted
+      }
       this.writeToDb(newRecords);
       return true;
     } catch (e) {

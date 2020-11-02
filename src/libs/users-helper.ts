@@ -4,7 +4,7 @@ import _ from 'lodash';
 const flatToStrDoc = require('flat');
 
 export interface ICrud {
-	create(doc: IDictionary): Promise<IDictionary>
+  create(doc: IDictionary): Promise<IDictionary>
   update(id: string, updateDoc: IDictionary): Promise<IDictionary>
   delete(id: string): Promise<boolean>
   list(args: IDictionary): Promise<IDictionary[]>
@@ -15,23 +15,23 @@ const USER_TABLE_NAME = 'users';
 export class UsersCrud implements ICrud {
   private dbHelper: DbHelper;
 
-	constructor() {
+  constructor() {
     this.dbHelper = new DbHelper(USER_TABLE_NAME);
-	}
+  }
 
-	async create(doc: IDictionary): Promise<IDictionary> {
-		return this.dbHelper.create(doc);
-	}
+  async create(doc: IDictionary): Promise<IDictionary> {
+    return this.dbHelper.create(doc);
+  }
 
-	async update(id: string, updateDoc: IDictionary): Promise<IDictionary> {
+  async update(id: string, updateDoc: IDictionary): Promise<IDictionary> {
     return this.dbHelper.update(id, updateDoc);
   }
 
-	async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     return this.dbHelper.delete(id);
   }
 
-	async list(args: IDictionary = {}): Promise<IDictionary[]> {
+  async list(args: IDictionary = {}): Promise<IDictionary[]> {
     let list = await this.dbHelper.list();
     const { page, limit, sortBy, sortDirection, match } = args;
     if (page) {
@@ -54,7 +54,7 @@ export class UsersCrud implements ICrud {
       list = list.filter(i => _.get(i, path) === val);
     }
     return list;
-	}
+  }
 }
 
 export const usersHelper = new UsersCrud();
