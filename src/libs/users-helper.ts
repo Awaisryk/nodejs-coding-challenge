@@ -1,5 +1,7 @@
 import { IDictionary } from "../common/defs";
 import { DbHelper } from './db-helper';
+import _ from 'lodash';
+const flatToStrDoc = require('flat');
 
 export interface ICrud {
 	create(doc: IDictionary): Promise<IDictionary>
@@ -30,11 +32,34 @@ export class UsersCrud implements ICrud {
   }
 
 	async list(args: IDictionary = {}): Promise<IDictionary[]> {
-		return this.dbHelper.list(args);
+    let list = await this.dbHelper.list();
+    const { page, limit, sortBy, sortDirection, match } = args;
+    if (page) {
+      const l = 10 * page; // assuming page size is 10
+      list = _.slice(list, l);
+    }
+    if (limit) {
+      list = _.slice(list, 0, limit);
+    }
+    if (sortBy) {
+      list = _.sortBy(list, sortBy);
+    }
+    if (sortDirection === 'descending') {
+      list = _.reverse(list);
+    }
+    if (match) {
+      const flatStrDoc = flatToStrDoc(match);
+      const path = _.head(_.keys(flatStrDoc));
+      const val = _.get(flatStrDoc, path);
+      list = list.filter(i => _.get(i, path) === val);
+    }
+    return list;
 	}
 }
 
 export const usersHelper = new UsersCrud();
+
+// helps in debugging
 
 if (typeof require !== 'undefined' && require.main === module) {
   const { newUserDoc } = require('../__tests__/samples/samples');

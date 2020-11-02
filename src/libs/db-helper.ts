@@ -39,7 +39,7 @@ export class DbHelper {
     }
   }
 
-  async list(args: IDictionary = {}): Promise<IDictionary[]> {
+  async list(): Promise<IDictionary[]> {
     return this.records;
   }
 }

@@ -30,7 +30,19 @@ describe('Users Routes test suite.', () => {
 	});
 
 	it('should fetch all users docs', async () => {
-		const response = await request(app).get(USERS_ROUTE)
+		const response = await request(app).get(USERS_ROUTE);
+		expect(response.body.count !== 0).to.be.true;
+		expect(typeof response.body.results === 'object').to.be.true;
+		expect(response.status === 200).to.be.true;
+	})
+
+	it('should fetch all users with query params docs', async () => {
+		const response = await request(app).get(USERS_ROUTE).query({
+			page: 2,
+			limit: 6
+		});
+		expect(response.body.count !== 0).to.be.true;
+		expect(typeof response.body.results === 'object').to.be.true;
 		expect(response.status === 200).to.be.true;
 	})
 

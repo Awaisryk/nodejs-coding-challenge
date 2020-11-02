@@ -6,14 +6,13 @@ import { NotFoundError } from '../response-helpers/not-found-error';
 import { AlreadyExistsError } from '../response-helpers/already-exists-helper';
 
 router.get('/', wrapAsync(async (req: any, res: any) => {
-  let results = await usersHelper.list();
+  let results = await usersHelper.list(req.query);
   if (results.length === 0) {
     throw new NotFoundError();
   }
-  const items = results.map(item => ({ ...item.props }));
   const response = {
-    count: items.length,
-    items
+    count: results.length,
+    results
   }
   res.status(200).json(response);
 }))
