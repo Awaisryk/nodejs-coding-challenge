@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "types": ["node"]
+    "types": ["node", "mocha"]
   },
   "include": [
     "src/**/*.ts",
